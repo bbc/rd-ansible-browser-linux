@@ -1,0 +1,34 @@
+---
+# module: rd-ansible-browser-linux/tasks/configure
+# description: Configure rd-ansible-browser-linux
+
+- name: Create disable screen turn off script
+  copy:
+    content: |
+      #!/bin/sh
+      sleep {{ sleep_between_commands }}
+
+      # By default we disable screensaver and screen off options here
+      {% for lines in script_lines %}
+      {{ lines }}
+      {% endfor %}
+
+      # Set resolution and where the monitors sit
+      {% for lines in xrandr_lines %}
+      {{ lines }}
+      {% endfor %}
+      sleep {{ sleep_between_commands }}
+
+      # Load midori browsers with specified urls and options
+      {% for window in web_windows %}
+      midori {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a {{ window['url'] }} &
+      {% endfor %}
+      sleep {{ sleep_between_commands }}
+
+      #wmctrl -l - to get names of windows
+      {% for window in web_windows %}
+      wmctrl -r '{{ window['wmctrl_identifier'] }}' -e 0,{{ window['position'] }}
+      {% endfor %}
+    dest: "{{ autorun_script_path }}"
+    mode: a+x
+  notify: reboot

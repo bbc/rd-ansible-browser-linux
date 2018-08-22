@@ -1,0 +1,39 @@
+---
+# module: rd-ansible-browser-linux/tasks/install
+# description: Install our required packages for rd-ansible-browser-linux
+
+- name: Install basic GUI
+  apt:
+    name: lubuntu-core
+    state: present
+    install_recommends: no
+
+- name: Install midori browser
+  apt:
+    deb: http://midori-browser.org/downloads/midori_0.5.11-0_amd64_.deb
+
+- name: Install x11 utils
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items: "{{ packages }}"
+  notify: reboot
+
+- name: Autologin
+  copy:
+    content: |
+      [SeatDefaults]
+      autologin-user={{ autologin_user }}
+      autologin-user-timeout=0
+      user-session=Lubuntu
+      greeter-session=lightdm-gtk-greeter
+    dest: /etc/lightdm/lightdm.conf
+  notify: reboot
+
+- name: Line to autorun script
+  copy:
+    content: |
+      @{{ autorun_script_path }}
+    dest: /etc/xdg/lxsession/Lubuntu/autostart
+  notify: reboot

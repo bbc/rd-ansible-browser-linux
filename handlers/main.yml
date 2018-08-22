@@ -1,0 +1,11 @@
+---
+# name: rd-ansible-browser-linux/handlers
+# description: All our handlers for rd-ansible-browser-linux go in here
+
+- name: Reboot if there was a change
+  shell: "sleep 2 && reboot"
+  async: 1
+  poll: 0
+  listen:
+    - reboot
+  when: reboot_on_configure

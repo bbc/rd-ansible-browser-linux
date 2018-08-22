@@ -1,0 +1,11 @@
+// This will call the shared-library plugin
+@Library("vagrant_ansible") _
+
+vagrant_ansible {
+    // agent_type = 'baremetal' or 'container'
+    agent_type = 'container'
+    // provider = 'docker' or 'virtualbox'
+    provider = 'docker'
+    // distros = [ 'xenial', 'bionic' ]
+    distros = [ 'xenial', 'bionic' ]
+}

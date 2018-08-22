@@ -1,0 +1,34 @@
+---
+# name: rd-ansible-browser-linux/defaults
+# description: ALL our default variables for rd-ansible-browser-linux go in here
+#------------------------------------------------------------------------------
+# Packages - All our required packages we need installing
+#------------------------------------------------------------------------------
+
+# - pre-requisites -
+
+packages:                                          # Tools we need to run this role
+  - x11-xserver-utils
+  - wmctrl
+
+script_lines:                                      # Script lines before we run anything, by default we disable screensaver and turn autolog off
+  - xset s off
+  - xset s noblank
+  - xset -dpms
+
+xrandr_lines:                                      # Here we can customise the display outputs
+  - 'xrandr --output DP-1 --mode 1920x1080 --scale 1x1'
+  - 'xrandr --output DP-2 --mode 1920x1080 --scale 1x1 --left-of DP-1'
+
+autorun_script_path: '/opt/disable_screensaver.sh' # Path to the script we autorun on boot
+autologin_user: root                               # The user we auto log in as
+sleep_between_commands: 2                          # How long do we sleep between commands, we need a slight delay to make sure everything doesn't happen too fast
+reboot_on_configure: true                          # Because much of what we do is ran on login, rebooting on reconfigure lets us boot into those new changes. This may be undesirable
+
+web_windows: []                                    # This is a list of web browser windows we wish to launch with options and positioning.
+
+#web_windows:
+#  - url: https://url.to.load                      # The URL we wish to load
+#    reload: false                                 # Do we reload the window, if so define it here in seconds ie 120
+#    wmctrl_identifier: special_identifier         # This is the value produced by 'wmctrl -l' and is used to capture and resize the browser window
+#    position: 0,0,1920,1080                       # What position and size do you want the window in: 'X,Y,WIDTH,HEIGHT

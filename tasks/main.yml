@@ -1,0 +1,9 @@
+---
+# module: rd-ansible-browser-linux/tasks
+# description: Install rd-ansible-browser-linux onto Ubuntu 16/18
+
+- name: Install rd-ansible-browser-linux
+  include_tasks: install.yml
+
+- name: Configure rd-ansible-browser-linux
+  include_tasks: configure.yml

@@ -1,0 +1,27 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: true
+  become_method: sudo
+  vars:
+    # Use Python 3 instead of 2
+    ansible_python_interpreter: /usr/bin/python3
+
+    # Proxy
+    proxy_env:
+      http_proxy: "{{ lookup('env','http_proxy') }}"
+      https_proxy: "{{ lookup('env','https_proxy') }}"
+      rsync_proxy: "{{ lookup('env','rsync_proxy') }}"
+
+    # rd-ansible-browser-linux variables
+    reboot_on_configure: false
+    # Example web browser
+    web_windows:
+      - url: https://www.bbc.co.uk/news
+        reload: false
+        fullscreen: true
+        wmctrl_identifier: 'Home - BBC News'
+        position: '0,0,1920,1080'
+  roles:
+    - role: "{{ playbook_dir | dirname }}"
+  environment: "{{ proxy_env }}"
