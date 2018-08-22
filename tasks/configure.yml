@@ -21,12 +21,16 @@
 
       # Load midori browsers with specified urls and options
       {% for window in web_windows %}
-      midori {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a {{ window['url'] }} &
+      midori -e custom-title={{ window['wmctrl_identifier'] }} -e show-navigationbar=false {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a {{ window['url'] }} &
       {% endfor %}
-      sleep {{ sleep_between_commands }}
 
       #wmctrl -l - to get names of windows
       {% for window in web_windows %}
+      until $(wmctrl -l | grep -q {{ window['wmctrl_identifier'] }} )
+      do
+        echo 'Cannot find {{ window['wmctrl_identifier'] }} waiting'
+        sleep 1
+      done
       wmctrl -r '{{ window['wmctrl_identifier'] }}' -e 0,{{ window['position'] }}
       {% endfor %}
     dest: "{{ autorun_script_path }}"

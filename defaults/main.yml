@@ -10,6 +10,7 @@
 packages:                                          # Tools we need to run this role
   - x11-xserver-utils
   - wmctrl
+  - libproxy-tools
 
 script_lines:                                      # Script lines before we run anything, by default we disable screensaver and turn autolog off
   - xset s off
@@ -17,12 +18,12 @@ script_lines:                                      # Script lines before we run 
   - xset -dpms
 
 xrandr_lines:                                      # Here we can customise the display outputs
-  - 'xrandr --output DP-1 --mode 1920x1080 --scale 1x1'
-  - 'xrandr --output DP-2 --mode 1920x1080 --scale 1x1 --left-of DP-1'
+  - 'xrandr --output DP-1 --mode 1920x1200 --scale 1x1'
+  - 'xrandr --output DP-2 --mode 1920x1200 --scale 1x1 --left-of DP-1'
 
 autorun_script_path: '/opt/disable_screensaver.sh' # Path to the script we autorun on boot
 autologin_user: root                               # The user we auto log in as
-sleep_between_commands: 2                          # How long do we sleep between commands, we need a slight delay to make sure everything doesn't happen too fast
+sleep_between_commands: 1                          # How long do we sleep between commands, we need a slight delay to make sure everything doesn't happen too fast
 reboot_on_configure: true                          # Because much of what we do is ran on login, rebooting on reconfigure lets us boot into those new changes. This may be undesirable
 
 web_windows: []                                    # This is a list of web browser windows we wish to launch with options and positioning.
