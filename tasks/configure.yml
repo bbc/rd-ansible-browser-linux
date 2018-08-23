@@ -21,7 +21,7 @@
 
       # Load midori browsers with specified urls and options
       {% for window in web_windows %}
-      midori -e custom-title={{ window['wmctrl_identifier'] }} -e show-navigationbar=false {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a {{ window['url'] }} &
+      midori -e custom-title={{ window['wmctrl_identifier'] }} -e show-navigationbar=false {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a '{{ window['url'] }}' &
       {% endfor %}
 
       #wmctrl -l - to get names of windows
