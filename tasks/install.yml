@@ -8,10 +8,6 @@
     state: present
     install_recommends: no
 
-- name: Install midori browser
-  apt:
-    deb: http://midori-browser.org/downloads/midori_0.5.11-0_amd64_.deb
-
 - name: Install x11 utils
   apt:
     name: "{{ item }}"
@@ -36,4 +32,37 @@
     content: |
       @{{ autorun_script_path }}
     dest: /etc/xdg/lxsession/Lubuntu/autostart
+  notify: reboot
+
+- name: Overwrite defaults for Lubuntu to hide the task panel
+  lineinfile:
+    path: /etc/xdg/lxpanel/default/panels/panel
+    regexp: "{{ item.regexp }}"
+    insertafter: "{{ item.after }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^\s+autohide=', line: '    autohide=1', after: '^\s+backgroundfile' }
+    - { regexp: '^\s+heightwhenhidden=', line: '    heightwhenhidden=0', after: '^\s+autohide=' }
+  register: create_panel_profile
+  notify: reboot
+
+- name: Get home folder of defined user
+  shell: "eval echo ~{{ autologin_user }}"
+  changed_when: false
+  register: user_path
+  when: create_panel_profile.changed
+
+- name: Create panel directory
+  file:
+    path: "{{ user_path.stdout }}/.config/lxpanel/Lubuntu/panels/"
+    owner: "{{ autologin_user }}"
+    recurse: yes
+  when: create_panel_profile.changed
+  notify: reboot
+
+- name: Copy new default to user panel
+  command: "cp -f /etc/xdg/lxpanel/default/panels/panel {{ user_path.stdout }}/.config/lxpanel/Lubuntu/panels/panel"
+  args:
+    warn: false
+  when: create_panel_profile.changed
   notify: reboot

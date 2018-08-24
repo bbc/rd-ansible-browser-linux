@@ -11,17 +11,21 @@ packages:                                          # Tools we need to run this r
   - x11-xserver-utils
   - wmctrl
   - libproxy-tools
+  - chromium-browser
 
 script_lines:                                      # Script lines before we run anything, by default we disable screensaver and turn autolog off
   - xset s off
   - xset s noblank
   - xset -dpms
 
-xrandr_lines:                                      # Here we can customise the display outputs
-  - 'xrandr --output DP-1 --mode 1920x1200 --scale 1x1'
-  - 'xrandr --output DP-2 --mode 1920x1200 --scale 1x1 --left-of DP-1'
+xrandr_lines: []                                   # Here we can customise the display outputs, we can set custom resolutions and display properties using xrandr, all these lines will be ran each login
 
-autorun_script_path: '/opt/disable_screensaver.sh' # Path to the script we autorun on boot
+# Example:
+# xrandr_lines:
+#   - 'xrandr --output DP-1 --mode 1920x1200 --scale 1x1'
+#   - 'xrandr --output DP-2 --mode 1920x1200 --scale 1x1 --left-of DP-1'
+
+autorun_script_path: '/opt/login_autorun.sh'       # Path to the script we autorun on boot
 autologin_user: root                               # The user we auto log in as
 sleep_between_commands: 1                          # How long do we sleep between commands, we need a slight delay to make sure everything doesn't happen too fast
 reboot_on_configure: true                          # Because much of what we do is ran on login, rebooting on reconfigure lets us boot into those new changes. This may be undesirable
@@ -30,6 +34,7 @@ web_windows: []                                    # This is a list of web brows
 
 #web_windows:
 #  - url: https://url.to.load                      # The URL we wish to load
-#    reload: false                                 # Do we reload the window, if so define it here in seconds ie 120
+#    reload: false                                 # Do we try to reload the window on web app failure
+#    fullscreen: false                             # Do we load this window in fullscreen mode. Useful if we are just displaying a single browser window
 #    wmctrl_identifier: special_identifier         # This is the value produced by 'wmctrl -l' and is used to capture and resize the browser window
 #    position: 0,0,1920,1080                       # What position and size do you want the window in: 'X,Y,WIDTH,HEIGHT

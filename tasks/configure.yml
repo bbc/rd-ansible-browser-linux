@@ -2,7 +2,7 @@
 # module: rd-ansible-browser-linux/tasks/configure
 # description: Configure rd-ansible-browser-linux
 
-- name: Create disable screen turn off script
+- name: Create browser window script
   copy:
     content: |
       #!/bin/sh
@@ -19,14 +19,15 @@
       {% endfor %}
       sleep {{ sleep_between_commands }}
 
-      # Load midori browsers with specified urls and options
+      # Load browsers with specified urls and options
       {% for window in web_windows %}
-      midori -e custom-title={{ window['wmctrl_identifier'] }} -e show-navigationbar=false {% if window['fullscreen'] %}-e Fullscreen {% endif %}{% if window['reload'] %}-i {{ window['reload'] }} {% endif %}-a '{{ window['url'] }}' &
+      chromium-browser --no-sandbox --test-type {% if window['fullscreen'] %}--start-fullscreen {% endif %}{% if window['reload'] %}--enable-offline-auto-reload {% endif %}-app='{{ window['url'] }}' &
+      # --ignore-certificate-errors can be used here if you want to ignore SSL warnings
       {% endfor %}
 
       #wmctrl -l - to get names of windows
       {% for window in web_windows %}
-      until $(wmctrl -l | grep -q {{ window['wmctrl_identifier'] }} )
+      until $(wmctrl -l | grep -q '{{ window['wmctrl_identifier'] }}' )
       do
         echo 'Cannot find {{ window['wmctrl_identifier'] }} waiting'
         sleep 1
