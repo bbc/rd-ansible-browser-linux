@@ -1,4 +1,5 @@
 // This will call the shared-library plugin
+// Driven by this: https://git.mist.rd.bbc.co.uk/ansible-master-repos/ansible-mist-pipelines
 @Library("vagrant_ansible") _
 
 vagrant_ansible {
@@ -7,5 +8,5 @@ vagrant_ansible {
     // provider = 'docker' or 'virtualbox'
     provider = 'docker'
     // distros = [ 'xenial', 'bionic' ]
-    distros = [ 'xenial', 'bionic' ]
+    distros = [ 'bionic' ]
 }
