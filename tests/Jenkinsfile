@@ -8,5 +8,5 @@ vagrant_ansible {
     // provider = 'docker' or 'virtualbox'
     provider = 'docker'
     // distros = [ 'xenial', 'bionic' ]
-    distros = [ 'bionic' ]
+    distros = [ 'bionic', 'focal' ]
 }
